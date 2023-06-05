@@ -1,70 +1,415 @@
-# Getting Started with Create React App
+### EX NO: 02
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# <p align="center">React Application</P>
 
-## Available Scripts
+## Aim:
+To create a react application for Tic Tac Toe game 
 
-In the project directory, you can run:
+## Algorithm:
 
-### `npm start`
+Step-1: Create a folder in cmd and import packages
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Step-2: Create a components and create .jsx file folder
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Step-3: As per the given task design the style.css
 
-### `npm test`
+Step-4: Fetch the data by using API
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Step-5: Run the program in npm start
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Program
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### components
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Board.jsx
+```
+import Square from './Square';
 
-### `npm run eject`
+const Board = ({ board, handleSquareEvent, winningSquare }) => {
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+  const updateSquare = position => {
+    const isWinningSquare = winningSquare.includes(position);
+    return (
+      <Square
+        value={board[position]}
+        onClick={() => handleSquareEvent(position)}
+        isWinningSquare={isWinningSquare}
+      />
+    );
+  };
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  return (
+    <div className="board">
+      <div className="board-row">
+        {updateSquare(0)}
+        {updateSquare(1)}
+        {updateSquare(2)}
+      </div>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+      <div className="board-row">
+        {updateSquare(3)}
+        {updateSquare(4)}
+        {updateSquare(5)}
+      </div>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+      <div className="board-row">
+        {updateSquare(6)}
+        {updateSquare(7)}
+        {updateSquare(8)}
+      </div>
+    </div>
+  );
+};
 
-## Learn More
+export default Board;
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Messages.jsx
+```
+const Messages = ({ winner, board, isXNext }) => {
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  const noMoves = board.every((el) => el !== null);
 
-### Code Splitting
+  return (
+    <div className="status-message">
+      
+      {!winner && !noMoves && (
+        <>
+          Turn player is{' '}
+          <span className={isXNext ? 'text-green' : 'text-orange'}>
+            {isXNext ? 'X' : 'O'}
+          </span>
+        </>
+      )}
+      {!winner && noMoves && (
+        <>
+          <span className="text-green">X</span> and{' '}
+          <span className="text-orange">O</span> are both tied !!!!!
+        </>
+      )}
+      
+    </div>
+  );
+};
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+export default Messages;
 
-### Analyzing the Bundle Size
+```
+## Square.jsx
+```
+import React from 'react';
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+const Square = ({ value, onClick, isWinningSquare }) => {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`square ${isWinningSquare ? 'winning' : ''} ${
+        value === 'X' ? 'text-green' : 'text-orange'
+      }`}
+    >
+      {value}
+    </button>
+  );
+};
 
-### Making a Progressive Web App
+export default Square;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
 
-### Advanced Configuration
+### app.scss
+```
+$green: #50ca1fce;
+$orange: #e69124f8;
+$blue: #253b7e;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    
+body {
+  font-family: 'Ninja Naruto', sans-serif;
+  background-color: $blue;
+  color: #fff;
+  padding-top: 50px;
+  margin: 0;
+}
 
-### Deployment
+button {
+  background: none;
+  border: none;
+  outline: none;
+  &:hover {
+    cursor: pointer;
+  }
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+.board {
+  .board-row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 2px solid #fff;
+    &:last-child {
+      border-bottom: none;
+    }
+    .square {
+      width: 80px;
+      height: 80px;
+      border-right: 2px solid #fff;
+      font-size: 2.5rem;
+      padding: 0;
+      overflow: hidden;
+      transition: all 0.2s;
+      &:last-child {
+        border-right: none;
+      }
+      &.winning {
+        animation: scaleText 1.5s ease-in infinite;
+        @keyframes scaleText {
+          0% {
+            transform: 2.5rem;
+          }
+          50% {
+            font-size: 3rem;
+          }
+          100% {
+            font-size: 2.5rem;
+          }
+        }
+      }
+    }
+  }
+}
 
-### `npm run build` fails to minify
+.app {
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+.text-green {
+  color: $green;
+}
+
+.text-orange {
+  color: $orange;
+}
+
+.status-message {
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  font-weight: lighter;
+  span {
+    font-weight: normal;
+  }
+}
+
+.btn-reset {
+  font-size: 1rem;
+  color: #fff;
+  border-radius: 15px;
+  padding: 12px 18px;
+  margin-top: 39px;
+  transition: all 0.2s;
+  background-color: $blue;
+  box-shadow: 0px 0px 0px 1px $orange;
+  &.active {
+    background-color: $orange;
+    box-shadow: none;
+  }
+  
+}
+
+.bg-balls {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  z-index: -1;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 70%;
+  }
+
+  &:before {
+    background-color: $orange;
+    right: -75px;
+    bottom: -75px;
+    @media screen and (min-width: 476px) {
+      width: 220px;
+      height: 220px;
+      right: -110px;
+      bottom: -110px;
+    }
+  }
+
+  &:after {
+    background-color: $green;
+    top: -75px;
+    left: -75px;
+    @media screen and (min-width: 476px) {
+      width: 220px;
+      height: 220px;
+      top: -110px;
+      left: -110px;
+    }
+  }
+}
+```
+
+## App.jsx
+```
+import React, { useState } from 'react';
+import Board from './components/Board';
+import './styles/app.scss';
+import { calculateWinner } from './Logic';
+import Messages from './components/Messages';
+
+const App = () => {
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [isXNext, setIsNext] = useState(false);
+  const { winner, winningSquare } = calculateWinner(board);
+
+  const [playerXWins, setPlayerXWins] = useState(0);
+  const [playerOWins, setPlayerOWins] = useState(0);
+  const [gameWinner, setGameWinner] = useState('');
+
+  const handleSquareEvent = (position) => {
+    if (board[position] || winner || gameWinner) {
+      return;
+    }
+
+    setBoard((prev) => {
+      return prev.map((square, pos) => {
+        if (pos === position) {
+          return isXNext ? 'X' : 'O';
+        }
+        return square;
+      });
+    });
+
+    setIsNext((prev) => !prev);
+  };
+
+  const handleGameResult = (player) => {
+    if (player === 'X') {
+      setPlayerXWins((prevWins) => prevWins + 1);
+      setBoard(Array(9).fill(null));
+      if (playerXWins + 1 === 3) {
+        setGameWinner('X');
+        setBoard(Array(9).fill(null));
+      }
+    } else if (player === 'O') {
+      setPlayerOWins((prevWins) => prevWins + 1);
+      setBoard(Array(9).fill(null));
+      if (playerOWins + 1 === 3) {
+        setGameWinner('O');
+        setBoard(Array(9).fill(null));
+      }
+    }
+  };
+
+  
+
+  return (
+    <div className="app">
+      <h1>
+        TI <span className="text-green">TA</span> TO
+      </h1>
+      <Messages winner={winner} board={board} isXNext={isXNext} />
+      <Board
+        board={board}
+        handleSquareEvent={handleSquareEvent}
+        winningSquare={winningSquare}
+      />
+
+      {gameWinner && <div>Game's winner is Player {gameWinner}!</div>}
+
+      {winner && (
+         <>
+          Winner is{' '}
+           <span className={winner === 'X' ? 'text-green' : 'text-orange'}>
+            {winner}
+           </span>
+         </>
+       )}
+
+      <div>Player X wins: {playerXWins}</div>
+      <div>Player O wins: {playerOWins}</div>
+
+      {playerXWins < 3 && playerOWins < 3 && (
+        <button onClick={() => handleGameResult(winner)} className={`btn-reset`}>
+          Next Round
+        </button>
+      )}
+
+<button
+        onClick={() => window.location.reload(false)}
+        className={`btn-reset ${winner ? 'active' : ' '}`}
+      >
+        Reset the game !
+      </button>
+
+      <div className="bg-balls" />
+    </div>
+  );
+};
+
+export default App;
+```
+
+## index.jsx
+```
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+## Logic.jsx
+```
+export function calculateWinner(blocks) {
+  const pattern = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  for (let i = 0; i < pattern.length; i++) {
+    const [a, b, c] = pattern[i];
+
+    if (blocks[a] && blocks[a] === blocks[b] && blocks[a] === blocks[c]) {
+      return {
+        winner: blocks[a],
+        winningSquare: pattern[i],
+      };
+    }
+  }
+  return {
+    winner: null,
+    winningSquare: [],
+  };
+}
+
+```
+## Output
+
+![image](https://github.com/Sugan2002/titato-end-task/assets/77089743/960f82d8-fb98-4963-8250-cb4867f8d33d)
+
+![image](https://github.com/Sugan2002/titato-end-task/assets/77089743/c83cfc77-f9ae-4692-a54d-d8fd55f3251e)
+
+![image](https://github.com/Sugan2002/titato-end-task/assets/77089743/0138a87c-1c56-40dd-a5ee-abfdf874fddd)
+
+## Result
+Thus, a react application for Tic Tac Toe game  is successfully developed.
