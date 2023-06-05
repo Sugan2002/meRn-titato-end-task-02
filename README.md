@@ -1,4 +1,4 @@
-### EX NO: 02
+### EXPERIMENT - 02
 
 # <p align="center">React Application</P>
 
